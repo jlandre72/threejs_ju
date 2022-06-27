@@ -4,32 +4,59 @@
 		<meta charset="utf-8">
 		<title>My first three.js app</title>
 		<style>
-			body { margin: 0; font-family: sans-serif; }
+			body { font-family: sans-serif; }
+			#info {  }
 		</style>
-
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 	</head>
 	<body>
-    <h1>three.js</h1>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+		<div id="ju"></div>
+
 		<script>
+		const taille = 500
 		const renderer = new THREE.WebGLRenderer();
 		//renderer.setSize( window.innerWidth, window.innerHeight );
-		renderer.setSize( 800, 600 );
-		document.body.appendChild( renderer.domElement );
+		renderer.setSize( taille, taille );
+		//document.body.appendChild( renderer.domElement );
+		document.querySelector("#ju").appendChild( renderer.domElement )
+		document.querySelector("#ju").style.border="3px solid orange"
+		document.querySelector("#ju").style.width=taille+"px"
 
-		const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 500 );
-		camera.position.set( 0, 50, 100 );
-		camera.lookAt( 0, 0, 0 );
+		const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 500 )
+		camera.position.set( 50, 0, 100 )
+		camera.lookAt( 0, 0, 0 )
 
-		const scene = new THREE.Scene();
+		const scene = new THREE.Scene()
+		const origin = new THREE.Vector3( -20, -20, 20 )
+		const length = taille/30;
+		const arrowHelper1 = new THREE.ArrowHelper( new THREE.Vector3( 10, 0, 0 ), origin, length, "#ff0000" );
+		scene.add( arrowHelper1 );
+		const arrowHelper2 = new THREE.ArrowHelper( new THREE.Vector3( 0, 10, 0 ), origin, length, "#00ff00" );
+		scene.add( arrowHelper2 );
+		const arrowHelper3 = new THREE.ArrowHelper( new THREE.Vector3( 0, 0, 10 ), origin, length, "#0000ff" );
+		scene.add( arrowHelper3 );
 
-		const geometry = new THREE.BoxGeometry( 10, 10, 10 );
-		const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-		const cube = new THREE.Mesh( geometry, material );
-		scene.add( cube2 );
+		rooms=[
+			{center: [0,0,0], size: [20,40,10], color: 0xff0000},
+			{center: [20,20,0], size: [20,10,10], color: 0x00ff00},
+			{center: [0,0,0], size: [20,10,10], color: 0x0000ff},
+			{center: [0,20,0], size: [20,10,10], color: 0xffff00},
+			{center: [20,20,0], size: [10,30,100], color: 0x00ffff},
+		];
+
+		rooms.forEach(function (item) {
+			var box=new THREE.Box3();
+			box.setFromCenterAndSize( new THREE.Vector3( item.center[0], item.center[1], item.center[2]), new THREE.Vector3( item.size[0], item.size[1], item.size[2] ) );
+			var helper = new THREE.Box3Helper( box, item.color );
+			scene.add( helper );
+		})
 
 
+
+
+		// toto
 			renderer.render( scene, camera );
 		</script>
+		<p>three.js 2</p>
 	</body>
 </html>
